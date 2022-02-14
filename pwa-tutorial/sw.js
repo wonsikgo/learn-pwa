@@ -43,3 +43,22 @@ self.addEventListener("fetch", function (event) {
       })
   );
 });
+
+self.addEventListener("activate", function (event) {
+  var newCacheList = ["pwa-offline-v3"];
+  event.waitUntil(
+    caches.keys
+      .then(function (cacheList) {
+        return Promise.all(
+          cacheList.map(function (cacheName) {
+            if (newCacheList.indexOf(cacheName) === -1) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+      .catch(function (error) {
+        return console.log(error);
+      })
+  );
+});
